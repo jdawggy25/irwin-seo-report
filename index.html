@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Report - Irwin & Associates | ComCreate</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-bg: #0a0c10;
+            --color-bg-deep: #060709;
+            --color-bg-elevated: #12151e;
+            --color-border: #1e2330;
+            --color-text: #f1f5f9;
+            --color-text-secondary: #94a3b8;
+            --color-text-muted: #64748b;
+            --color-primary: #3b82f6;
+            --color-primary-light: #60a5fa;
+            --color-error: #f87171;
+            --color-warning: #fbbf24;
+            --color-success: #34d399;
+            --font-sans: 'Inter', -apple-system, sans-serif;
+            --font-mono: 'JetBrains Mono', monospace;
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-5: 1.25rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+            --space-10: 2.5rem;
+            --space-12: 3rem;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: var(--space-8) var(--space-4);
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            padding: var(--space-12) 0;
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: var(--space-10);
+        }
+
+        .logo {
+            margin-bottom: var(--space-6);
+        }
+
+        .logo img {
+            height: 48px;
+            width: auto;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--color-text);
+            margin-bottom: var(--space-2);
+        }
+
+        .client-name {
+            font-size: 1.25rem;
+            color: var(--color-primary);
+            font-weight: 600;
+        }
+
+        .report-date {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+            margin-top: var(--space-4);
+        }
+
+        /* Section Headers */
+        h2 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--color-text);
+            margin: var(--space-10) 0 var(--space-4);
+            padding-bottom: var(--space-2);
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        h3 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--color-text-secondary);
+            margin: var(--space-6) 0 var(--space-3);
+            font-family: var(--font-mono);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: var(--space-4) 0;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: var(--space-3) var(--space-4);
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+
+        th {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            background: var(--color-bg-deep);
+        }
+
+        td {
+            color: var(--color-text-secondary);
+        }
+
+        td strong {
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: var(--color-bg-elevated);
+        }
+
+        /* Status Badges */
+        .badge {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-critical {
+            background: rgba(248, 113, 113, 0.15);
+            color: var(--color-error);
+        }
+
+        .badge-warning {
+            background: rgba(251, 191, 36, 0.15);
+            color: var(--color-warning);
+        }
+
+        .badge-success {
+            background: rgba(52, 211, 153, 0.15);
+            color: var(--color-success);
+        }
+
+        /* Value highlights */
+        .value-critical {
+            color: var(--color-error);
+            font-weight: 600;
+        }
+
+        .value-warning {
+            color: var(--color-warning);
+            font-weight: 600;
+        }
+
+        .value-success {
+            color: var(--color-success);
+            font-weight: 600;
+        }
+
+        /* Alert boxes */
+        .alert {
+            padding: var(--space-4);
+            border-radius: var(--radius-md);
+            margin: var(--space-4) 0;
+            border-left: 4px solid;
+        }
+
+        .alert-critical {
+            background: rgba(248, 113, 113, 0.08);
+            border-color: var(--color-error);
+        }
+
+        .alert-warning {
+            background: rgba(251, 191, 36, 0.08);
+            border-color: var(--color-warning);
+        }
+
+        .alert-info {
+            background: rgba(59, 130, 246, 0.08);
+            border-color: var(--color-primary);
+        }
+
+        .alert h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: var(--space-2);
+        }
+
+        .alert-critical h4 { color: var(--color-error); }
+        .alert-warning h4 { color: var(--color-warning); }
+        .alert-info h4 { color: var(--color-primary); }
+
+        .alert p {
+            font-size: 0.85rem;
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Charts */
+        .chart-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--space-4);
+            margin: var(--space-6) 0;
+        }
+
+        @media (max-width: 640px) {
+            .chart-grid { grid-template-columns: 1fr; }
+        }
+
+        .chart-card {
+            background: var(--color-bg-deep);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-3);
+        }
+
+        .chart-label {
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .chart-value {
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .chart-container {
+            height: 200px;
+            position: relative;
+        }
+
+        .chart-container.tall {
+            height: 280px;
+        }
+
+        /* DR Scale indicator */
+        .dr-scale {
+            margin: var(--space-4) 0;
+            background: var(--color-bg-elevated);
+            border-radius: var(--radius-md);
+            padding: var(--space-4);
+        }
+
+        .dr-bar-container {
+            position: relative;
+            height: 32px;
+            background: var(--color-bg-deep);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .dr-bar-fill {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-error), var(--color-warning));
+            border-radius: var(--radius-sm);
+        }
+
+        .dr-marker {
+            position: absolute;
+            top: -24px;
+            transform: translateX(-50%);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+        }
+
+        .dr-marker.current {
+            color: var(--color-error);
+            font-weight: 600;
+        }
+
+        .dr-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: var(--space-2);
+            font-family: var(--font-mono);
+            font-size: 0.7rem;
+            color: var(--color-text-muted);
+        }
+
+        /* Backlink bars */
+        .backlink-bar {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            margin: var(--space-2) 0;
+        }
+
+        .backlink-label {
+            width: 140px;
+            font-size: 0.8rem;
+            color: var(--color-text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .backlink-track {
+            flex: 1;
+            height: 20px;
+            background: var(--color-bg-elevated);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .backlink-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-primary-light));
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: var(--space-2);
+        }
+
+        .backlink-fill span {
+            font-family: var(--font-mono);
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Insights list */
+        .insights-list {
+            list-style: none;
+            margin: var(--space-4) 0;
+        }
+
+        .insights-list li {
+            padding: var(--space-3) 0;
+            border-bottom: 1px solid var(--color-border);
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .insights-list li:last-child {
+            border-bottom: none;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: var(--space-12);
+            padding-top: var(--space-6);
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 0.8rem;
+            color: var(--color-text-muted);
+        }
+
+        footer .brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: var(--space-2);
+            margin-bottom: var(--space-3);
+        }
+
+        footer .brand img {
+            height: 24px;
+        }
+
+        footer .brand span {
+            font-weight: 600;
+            color: var(--color-text-secondary);
+        }
+
+        /* Position badges */
+        .pos-badge {
+            display: inline-block;
+            padding: 0.125rem 0.5rem;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .pos-top3 { background: rgba(52, 211, 153, 0.15); color: var(--color-success); }
+        .pos-page1 { background: rgba(59, 130, 246, 0.15); color: var(--color-primary); }
+        .pos-page2 { background: rgba(251, 191, 36, 0.15); color: var(--color-warning); }
+        .pos-low { background: rgba(248, 113, 113, 0.15); color: var(--color-error); }
+
+        /* Summary cards */
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: var(--color-border);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin: var(--space-4) 0;
+        }
+
+        @media (max-width: 640px) {
+            .summary-grid { grid-template-columns: 1fr; }
+        }
+
+        .summary-card {
+            background: var(--color-bg-deep);
+            padding: var(--space-4);
+            text-align: center;
+        }
+
+        .summary-value {
+            font-family: var(--font-mono);
+            font-size: 1.75rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: var(--space-1);
+        }
+
+        .summary-label {
+            font-size: 0.75rem;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .prose p {
+            margin: var(--space-3) 0;
+            color: var(--color-text-secondary);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <img src="wide-logo.png" alt="ComCreate" onerror="this.style.display='none'">
+            </div>
+            <h1>Performance Report - January 2025</h1>
+            <p class="client-name">Irwin & Associates</p>
+            <p class="report-date">www.irwinandassociates.com</p>
+        </header>
+
+        <main>
+            <!-- PERFORMANCE SNAPSHOT -->
+            <h2>Performance Snapshot</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>This Month</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Traffic Value</strong></td>
+                        <td class="value-critical">$0.43/mo</td>
+                        <td><span class="badge badge-critical">Critical</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Organic Traffic</strong></td>
+                        <td class="value-critical">14/mo</td>
+                        <td><span class="badge badge-critical">Critical</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Domain Rating</strong></td>
+                        <td class="value-critical">0.6</td>
+                        <td><span class="badge badge-critical">Critical</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Organic Keywords</strong></td>
+                        <td class="value-critical">8</td>
+                        <td><span class="badge badge-critical">Critical</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Live Backlinks</strong></td>
+                        <td class="value-warning">62</td>
+                        <td><span class="badge badge-warning">Low</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-critical">
+                <h4>⚠️ Why This Is Bad</h4>
+                <p>This website has <strong>almost no organic visibility</strong>. With only 14 visits per month and $0.43 in traffic value, the site is essentially invisible in search engines. A typical law firm website should have 500-5,000+ monthly organic visitors. The Domain Rating of 0.6 (out of 100) is <strong>50x lower</strong> than the industry average of 30-50 for law firms.</p>
+            </div>
+
+            <!-- DOMAIN AUTHORITY METRICS -->
+            <h2>Domain Authority Metrics</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Domain Rating (DR)</strong></td>
+                        <td class="value-critical">0.6</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Ahrefs Rank</strong></td>
+                        <td>91,311,926</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Live Backlinks</strong></td>
+                        <td>62</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Referring Domains</strong></td>
+                        <td>25</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Domain Rating Scale</h3>
+            <div class="dr-scale">
+                <p style="font-size: 0.8rem; color: var(--color-text-muted); margin-bottom: var(--space-3);">
+                    DR 0.6 out of 100 — In the bottom 0.6% of all websites
+                </p>
+                <div class="dr-bar-container">
+                    <div class="dr-bar-fill" style="width: 0.6%;"></div>
+                    <div class="dr-marker current" style="left: 0.6%;">▼ 0.6 (You)</div>
+                    <div class="dr-marker" style="left: 30%;">30 (Avg Law Firm)</div>
+                    <div class="dr-marker" style="left: 70%;">70+ (Established)</div>
+                </div>
+                <div class="dr-labels">
+                    <span>0 - No Authority</span>
+                    <span>50 - Medium</span>
+                    <span>100 - Maximum</span>
+                </div>
+            </div>
+
+            <div class="alert alert-critical">
+                <h4>⚠️ Why This Is Bad</h4>
+                <p>Domain Rating measures the strength of your backlink profile. A DR of <strong>0.6 means Google sees almost no authority signals</strong> for this website. Without authority, ranking for competitive keywords like "estate planning attorney San Diego" is nearly impossible. The Ahrefs Rank of 91 million+ means you're ranked lower than 91 million other websites globally.</p>
+            </div>
+
+            <!-- ORGANIC SEARCH PERFORMANCE -->
+            <h2>Organic Search Performance</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Organic Keywords (US)</strong></td>
+                        <td class="value-critical">8</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Organic Traffic (US)</strong></td>
+                        <td class="value-critical">14/month</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Traffic Value (US)</strong></td>
+                        <td class="value-critical">$0.43/month</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Keywords in Top 3</strong></td>
+                        <td>1 (branded only)</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Keyword Rankings</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Keyword</th>
+                        <th>Position</th>
+                        <th>Volume</th>
+                        <th>Traffic</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>irwin and associates</strong></td>
+                        <td><span class="pos-badge pos-top3">#3</span></td>
+                        <td>70/mo</td>
+                        <td>13</td>
+                    </tr>
+                    <tr>
+                        <td>12555 high bluff drive</td>
+                        <td><span class="pos-badge pos-page2">#11</span></td>
+                        <td>20/mo</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>douglass and associates</td>
+                        <td><span class="pos-badge pos-page2">#16</span></td>
+                        <td>40/mo</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>irwin law firm</td>
+                        <td><span class="pos-badge pos-page2">#17</span></td>
+                        <td>30/mo</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>douglas and associates</td>
+                        <td><span class="pos-badge pos-low">#67</span></td>
+                        <td>30/mo</td>
+                        <td>0</td>
+                    </tr>
+                    <tr>
+                        <td>douglass & associates</td>
+                        <td><span class="pos-badge pos-low">#88</span></td>
+                        <td>10/mo</td>
+                        <td>0</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="alert alert-critical">
+                <h4>⚠️ Why This Is Bad</h4>
+                <p><strong>100% of traffic comes from branded searches</strong> (people searching "irwin and associates"). There are <strong>ZERO rankings for practice area keywords</strong> like "estate planning attorney", "wills and trusts lawyer", "probate attorney San Diego", etc. A typical law firm ranks for 500-5,000+ keywords. This site ranks for only 8 — and 7 of them generate zero traffic.</p>
+            </div>
+
+            <!-- TRAFFIC TRENDS -->
+            <h2>Historical Performance</h2>
+
+            <div class="chart-grid">
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <span class="chart-label">Organic Traffic (12 months)</span>
+                        <span class="chart-value value-critical">14/mo</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="trafficChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <div class="chart-header">
+                        <span class="chart-label">Referring Domains</span>
+                        <span class="chart-value value-warning">25</span>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="refdomainsChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-card" style="margin-top: var(--space-4);">
+                <div class="chart-header">
+                    <span class="chart-label">Domain Rating History</span>
+                    <span class="chart-value value-critical">DR 0.6</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="drChart"></canvas>
+                </div>
+            </div>
+
+            <div class="alert alert-warning">
+                <h4>📊 What The Graphs Show</h4>
+                <p>Traffic has remained extremely low (under 20 visits/month) for the entire year. The Domain Rating improved slightly from 0.2 to 0.6 in mid-2024, and referring domains grew from 13 to 25 (+92%). However, these numbers are still far too low to drive meaningful organic visibility.</p>
+            </div>
+
+            <!-- BACKLINK PROFILE -->
+            <h2>Backlink Profile</h2>
+
+            <h3>Top Referring Domains (by Domain Rating)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Domain</th>
+                        <th>DR</th>
+                        <th>Links</th>
+                        <th>First Seen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>expertise.com</strong></td>
+                        <td><span class="value-success">88</span></td>
+                        <td>1</td>
+                        <td>Aug 2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>sandiegouniontribune.com</strong></td>
+                        <td><span class="value-success">86</span></td>
+                        <td>1</td>
+                        <td>Jul 2024</td>
+                    </tr>
+                    <tr>
+                        <td><strong>birdeye.com</strong></td>
+                        <td><span class="value-success">85</span></td>
+                        <td>1</td>
+                        <td>Feb 2023</td>
+                    </tr>
+                    <tr>
+                        <td>bizhwy.com</td>
+                        <td><span class="value-warning">69</span></td>
+                        <td>1</td>
+                        <td>Sep 2024</td>
+                    </tr>
+                    <tr>
+                        <td>buzzfile.com</td>
+                        <td><span class="value-warning">68</span></td>
+                        <td>2</td>
+                        <td>Sep 2025</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>Backlink Summary</h3>
+            <div class="summary-grid">
+                <div class="summary-card">
+                    <div class="summary-value">62</div>
+                    <div class="summary-label">Live Backlinks</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">25</div>
+                    <div class="summary-label">Referring Domains</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value">168</div>
+                    <div class="summary-label">All-Time Domains</div>
+                </div>
+            </div>
+
+            <h3>Anchor Text Distribution</h3>
+            <div style="margin: var(--space-4) 0;">
+                <div class="backlink-bar">
+                    <span class="backlink-label">irwinandassociates.com</span>
+                    <div class="backlink-track">
+                        <div class="backlink-fill" style="width: 100%;"><span>20</span></div>
+                    </div>
+                </div>
+                <div class="backlink-bar">
+                    <span class="backlink-label">willthatworks.com</span>
+                    <div class="backlink-track">
+                        <div class="backlink-fill" style="width: 90%;"><span>18</span></div>
+                    </div>
+                </div>
+                <div class="backlink-bar">
+                    <span class="backlink-label">sdestateattorney.com</span>
+                    <div class="backlink-track">
+                        <div class="backlink-fill" style="width: 30%;"><span>6</span></div>
+                    </div>
+                </div>
+                <div class="backlink-bar">
+                    <span class="backlink-label">(empty/image)</span>
+                    <div class="backlink-track">
+                        <div class="backlink-fill" style="width: 25%;"><span>5</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert alert-warning">
+                <h4>⚠️ Anchor Text Problem</h4>
+                <p><strong>90%+ of backlinks use naked URL anchors</strong> (just the domain name). There are no keyword-rich anchors like "estate planning attorney" or "San Diego wills lawyer". This is a missed opportunity to signal relevance to Google for target keywords.</p>
+            </div>
+
+            <!-- KEY INSIGHTS -->
+            <h2>Key Insights</h2>
+
+            <ul class="insights-list">
+                <li><strong style="color: var(--color-error);">Critical:</strong> Domain Rating (0.6) is 50x lower than industry average for law firms</li>
+                <li><strong style="color: var(--color-error);">Critical:</strong> Zero rankings for any practice area keywords (estate planning, wills, trusts, probate)</li>
+                <li><strong style="color: var(--color-error);">Critical:</strong> 100% of traffic from branded searches only — no discovery traffic</li>
+                <li><strong style="color: var(--color-error);">Critical:</strong> Only 8 keywords indexed vs. 500-5,000+ for typical law firms</li>
+                <li><strong style="color: var(--color-warning);">Warning:</strong> Multiple spammy SEO service domains linking to site</li>
+                <li><strong style="color: var(--color-success);">Positive:</strong> High-authority backlinks from SD Union Tribune (DR 86) and Expertise.com (DR 88)</li>
+                <li><strong style="color: var(--color-success);">Positive:</strong> Referring domains grew 92% year-over-year (13 → 25)</li>
+            </ul>
+
+            <!-- RECOMMENDATIONS -->
+            <h2>Recommended Actions</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Priority</th>
+                        <th>Action</th>
+                        <th>Impact</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><span class="pos-badge pos-top3">1</span></td>
+                        <td>Create optimized service pages for "San Diego estate planning attorney", "wills and trusts lawyer"</td>
+                        <td><span class="badge badge-success">High</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="pos-badge pos-top3">2</span></td>
+                        <td>Build local citations: Avvo, FindLaw, Justia, NOLO, local bar directories</td>
+                        <td><span class="badge badge-success">High</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="pos-badge pos-page1">3</span></td>
+                        <td>Implement LocalBusiness and Attorney schema markup</td>
+                        <td><span class="badge badge-warning">Medium</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="pos-badge pos-page1">4</span></td>
+                        <td>Disavow spammy SEO service backlinks in Google Search Console</td>
+                        <td><span class="badge badge-warning">Medium</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="pos-badge pos-page2">5</span></td>
+                        <td>Develop blog content targeting long-tail estate planning queries</td>
+                        <td><span class="badge badge-warning">Medium</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </main>
+
+        <footer>
+            <div class="brand">
+                <img src="comcreate-logo.png" alt="ComCreate" onerror="this.style.display='none'">
+                <span>ComCreate Digital Marketing</span>
+            </div>
+            <p>Report Period: January 2025</p>
+            <p>Data Source: Ahrefs</p>
+            <p>Generated: 2025-01-15</p>
+        </footer>
+    </div>
+
+    <script>
+        Chart.defaults.color = '#64748b';
+        Chart.defaults.borderColor = '#1e2330';
+
+        // Traffic Chart - Note the low scale (max ~20)
+        new Chart(document.getElementById('trafficChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
+                datasets: [{
+                    label: 'Visits',
+                    data: [9, 11, 10, 11, 8, 4, 3, 6, 3, 2, 13, 17, 11],
+                    backgroundColor: '#f87171',
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Extremely Low: Peak was only 17 visits',
+                        color: '#f87171',
+                        font: { size: 11, weight: 'normal' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 25,
+                        grid: { color: '#1e2330' },
+                        title: {
+                            display: true,
+                            text: 'Monthly Visits',
+                            color: '#64748b',
+                            font: { size: 10 }
+                        }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Referring Domains Chart
+        new Chart(document.getElementById('refdomainsChart'), {
+            type: 'line',
+            data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan'],
+                datasets: [{
+                    label: 'Domains',
+                    data: [13, 13, 13, 13, 12, 12, 17, 19, 22, 28, 26, 27, 29],
+                    borderColor: '#fbbf24',
+                    backgroundColor: 'rgba(251, 191, 36, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 3,
+                    pointBackgroundColor: '#fbbf24'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    title: {
+                        display: true,
+                        text: 'Growing (+92% YoY) but still low',
+                        color: '#fbbf24',
+                        font: { size: 11, weight: 'normal' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 35,
+                        grid: { color: '#1e2330' },
+                        title: {
+                            display: true,
+                            text: 'Referring Domains',
+                            color: '#64748b',
+                            font: { size: 10 }
+                        }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+
+        // Domain Rating Chart
+        new Chart(document.getElementById('drChart'), {
+            type: 'line',
+            data: {
+                labels: ['Jan 24', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec', 'Jan 25'],
+                datasets: [{
+                    label: 'DR',
+                    data: [0.2, 0.2, 0.2, 0.2, 0.2, 0.2, 0.5, 0.6, 0.6, 0.6, 0.6, 0.6, 0.6],
+                    borderColor: '#f87171',
+                    backgroundColor: 'rgba(248, 113, 113, 0.1)',
+                    fill: true,
+                    tension: 0.3,
+                    pointRadius: 4,
+                    pointBackgroundColor: '#f87171'
+                }, {
+                    label: 'Industry Avg',
+                    data: [35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35],
+                    borderColor: '#64748b',
+                    borderDash: [5, 5],
+                    pointRadius: 0,
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'bottom',
+                        labels: { boxWidth: 12, padding: 15 }
+                    },
+                    title: {
+                        display: true,
+                        text: 'DR 0.6 vs Industry Average of 35',
+                        color: '#f87171',
+                        font: { size: 11, weight: 'normal' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 50,
+                        grid: { color: '#1e2330' },
+                        title: {
+                            display: true,
+                            text: 'Domain Rating',
+                            color: '#64748b',
+                            font: { size: 10 }
+                        }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
